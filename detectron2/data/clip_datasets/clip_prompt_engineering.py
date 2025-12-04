@@ -137,7 +137,7 @@ class SimpleTokenizer(object):
 
 
 # https://github.com/openai/CLIP/blob/main/clip/clip.py
-#_tokenizer = SimpleTokenizer()
+_tokenizer = SimpleTokenizer()
 
 def tokenize(texts: Union[str, List[str]], context_length: int = 77):
     if isinstance(texts, str):

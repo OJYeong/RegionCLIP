@@ -51,3 +51,22 @@ MODEL.CLIP.OPENSET_TEST_TEXT_EMB_PATH ./pretrained_ckpt/concept_emb/coco_65_cls_
 # MODEL.ROI_BOX_HEAD.POOLER_RESOLUTION 18 \
 # MODEL.ROI_MASK_HEAD.POOLER_RESOLUTION 18 \
 # MODEL.RESNETS.RES2_OUT_CHANNELS 320 \
+
+
+
+
+
+
+# # RN50x4, VisualGenome
+# python3 ./tools/train_net.py \
+# --num-gpus 1 \
+# --config-file ./configs/COCO-Detection/fast_rcnn_R_50_C4_ovd.yaml \
+# MODEL.WEIGHTS ./pretrained_ckpt/regionclip/regionclip_pretrained-cc_rn50x4.pth \
+# MODEL.CLIP.OFFLINE_RPN_CONFIG ./configs/COCO-Detection/rpn_R_50_FPN_1x.yaml \
+# MODEL.CLIP.BB_RPN_WEIGHTS ./pretrained_ckpt/rpn/rpn_lvis_866_lsj.pth \
+# MODEL.CLIP.TEXT_EMB_PATH ./pretrained_ckpt/concept_emb/lvis_866_base_cls_emb_rn50x4.pth \
+# MODEL.CLIP.OPENSET_TEST_TEXT_EMB_PATH ./pretrained_ckpt/concept_emb/lvis_1203_cls_emb_rn50x4.pth \
+# MODEL.CLIP.OFFLINE_RPN_LSJ_PRETRAINED True \
+# MODEL.CLIP.TEXT_EMB_DIM 640 \
+# MODEL.RESNETS.DEPTH 200 \
+# MODEL.ROI_BOX_HEAD.POOLER_RESOLUTION 18 \

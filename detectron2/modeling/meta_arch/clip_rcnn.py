@@ -26,6 +26,9 @@ from ..backbone.fpn import build_resnet_fpn_backbone
 from ..backbone.clip_backbone import build_clip_language_encoder
 from detectron2.utils.comm import gather_tensors, MILCrossEntropy
 
+# Dual Prompt Scene Graph Generation
+from detectron2.modeling.dpt_sgg import PromptLearner, TextEncoder
+
 __all__ = ["CLIPFastRCNN", "PretrainFastRCNN"]
 
 @META_ARCH_REGISTRY.register()

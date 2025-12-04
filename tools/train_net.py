@@ -39,9 +39,27 @@ from detectron2.evaluation import (
 )
 from detectron2.modeling import GeneralizedRCNNWithTTA
 
+### Dual Prompt Scene Graph ###
+from detectron2.modeling.meta_arch import DPTCLIP
+
 #os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 import torch.multiprocessing
 torch.multiprocessing.set_sharing_strategy('file_system')
+
+
+import sys
+# 현재 파일(train_net.py)이 있는 디렉토리를 path에 추가하여 register_datasets.py를 찾을 수 있게 함
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    from register_dataset import register_visual_genome, register_open_images
+    # 데이터셋 등록 함수 호출
+    register_visual_genome()
+    # register_open_images()
+    print("[Info] Custom datasets (Visual Genome, Open Images) registered successfully.")
+except ImportError:
+    print("[Warning] register_datasets.py not found. Skipping custom dataset registration.")
+
 
 class Trainer(DefaultTrainer):
     """
@@ -117,11 +135,24 @@ class Trainer(DefaultTrainer):
         return res
 
 
+# [추가 2] DPT 전용 Config 추가 함수 정의
+def add_dpt_config(cfg):
+    from detectron2.config import CfgNode as CN
+    _C = cfg
+    
+    _C.MODEL.DPT = CN()
+    _C.MODEL.DPT.N_CTX = 16              # 프롬프트 토큰 길이
+    _C.MODEL.DPT.CTX_INIT = ""           # 초기화 단어 (비워두면 Random)
+    _C.MODEL.DPT.CSC = False             # Class-Specific Context 여부
+    _C.MODEL.DPT.CLASS_TOKEN_POSITION = "middle" # 클래스 토큰 위치 ("end", "middle", "front")
+
+
 def setup(args):
     """
     Create configs and perform basic setups.
     """
     cfg = get_cfg()
+    add_dpt_config(cfg) # DPT Confgit
     cfg.merge_from_file(args.config_file)
     cfg.merge_from_list(args.opts)
     cfg.freeze()
